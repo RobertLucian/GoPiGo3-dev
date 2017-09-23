@@ -13,13 +13,8 @@ from __future__ import division
 hardware_connected = True
 
 import subprocess # for executing system calls
-try:
-    import spidev
-    import fcntl      # for lockf mutex support
-except:
-    hardware_connected = False
-    print ("Can't import spidev or fcntl")
-    
+import spidev
+import fcntl
 import math       # import math for math.pi constant
 import time
 
