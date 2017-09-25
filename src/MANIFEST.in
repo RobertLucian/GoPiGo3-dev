@@ -1,2 +1,1 @@
-include README.rst
-include gopigo3/fw/*
+include gopigo3/additional-files/*

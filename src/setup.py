@@ -1,22 +1,8 @@
-import subprocess
-import sys
-
 from setuptools import setup
-from setuptools.command.install import install as _install
-from setuptools.command.develop import develop as _develop
 
 def readme():
-    with open('README.rst') as f:
+    with open('gopigo3/additional-files/README.rst') as f:
         return f.read()
-
-class PostInstallCommand(_install):
-    def run(self):
-        _install.run(self)
-        proc = subprocess.Popen(['bash', 'gopigo3/fw/install.sh'],
-                                stdout=subprocess.PIPE,
-                                )
-        stdout_value = proc.communicate()
-        print(sys.argv)
 
 setup(
     name='gopigo3-dev',
@@ -28,7 +14,7 @@ setup(
     author='Robert Lucian CHIRIAC',
     author_email='robert.lucian.chiriac@gmail.com',
 
-    license = 'MIT',
+    license='MIT',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
@@ -45,11 +31,9 @@ setup(
     keywords=['robot', 'gopigo', 'gopigo3', 'dexter industries', 'learning', 'education'],
 
     packages=['gopigo3'],
-    install_requires=['spidev'],
+    package_data={'gopigo3': ['additional-files/*']},
     include_package_data=True,
-    zip_safe=True,
+    install_requires=['spidev', 'RPi.GPIO'],
     entry_points=dict(console_scripts=['gopigo3=gopigo3.command_line:main']),
-    cmdclass = {
-       'install': PostInstallCommand
-   },
+    zip_safe=True
 )
