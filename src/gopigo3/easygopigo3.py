@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import gopigo3
+from gopigo3 import gopigo3
+import time
 
 #####################################################################
 #
@@ -44,10 +45,8 @@ class EasyGoPiGo3(gopigo3.GoPiGo3):
         try:
             super(self.__class__, self).__init__()
         except IOError as e:
-            print("FATAL ERROR:\nGoPiGo3 is not detected.")
             raise e
         except gopigo3.FirmwareVersionError as e:
-            print("FATAL ERROR:\nTo update the firmware on Raspbian for Robots you need to run DI Software Update and choose Update Robot")
             raise e
         except Exception as e:
             raise e

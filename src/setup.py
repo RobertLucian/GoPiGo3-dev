@@ -33,7 +33,7 @@ setup(
     packages=['gopigo3'],
     package_data={'gopigo3': ['additional-files/*']},
     include_package_data=True,
-    install_requires=['spidev', 'RPi.GPIO'],
+    install_requires=['spidev', 'RPi.GPIO', 'rst2ansi', 'docutils'],
     entry_points=dict(console_scripts=['gopigo3=gopigo3.command_line:main']),
     zip_safe=True
 )
