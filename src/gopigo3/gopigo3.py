@@ -223,7 +223,7 @@ class GoPiGo3(object):
                 raise IOError("GoPiGo3 with address %d not connected." % addr)
             if vfw.split('.')[0] != FIRMWARE_VERSION_REQUIRED.split('.')[0] or \
                vfw.split('.')[1] != FIRMWARE_VERSION_REQUIRED.split('.')[1]:
-                raise FirmwareVersionError("GoPiGo3 firmware needs to be version %s but is currently version %s" \
+                raise FirmwareVersionError("GoPiGo3 firmware needs to be version %s but is currently version %s. Please update first." \
                                            % (FIRMWARE_VERSION_REQUIRED, vfw))
 
     def spi_transfer_array(self, data_out):
