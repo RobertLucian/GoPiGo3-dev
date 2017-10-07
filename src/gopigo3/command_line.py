@@ -6,7 +6,7 @@ import shlex
 parser = argparse.ArgumentParser(description='This is a command-line tool for interfacing with the GoPiGo3 board\n'\
                                  'It can be used for:\n'\
                                  '1. Remotely controlling a GoPiGo3 robot.\n'\
-                                 '2. Installing/Uninstalling the shutdown button support.\n'\
+                                 '2. Installing/Uninstalling the shutdown button service.\n'\
                                  '3. Checking the fw/hw and retrieving more info about it.\n'\
                                  '4. Flashing the fw.',
                                  formatter_class=argparse.RawTextHelpFormatter)
@@ -41,8 +41,8 @@ go_parser.add_argument('-r', '--degrees-rotate', action='store', type=int, defau
                                                                                 'The number can be either positive or negative and must be an integer. When the option is not specified, the number is set to 360. Can be used for {rotate} command.')
 
 check_parser_actions = (
-    'fw-version',
-    'hw-version',
+    'fw',
+    'hw',
     'info'
 )
 check_parser.add_argument(action='store', choices=check_parser_actions, dest='action_check', help='Commands for detecting/checking the GoPiGo3 board.')
@@ -54,20 +54,32 @@ fw_parser.add_argument(action='store', choices=fw_parser_actions, dest='action_f
 fw_parser.add_argument('-s', '--sudo', action='store_true', help='Appends the sudo command to whatever command is run. This is required if only the fw-burning tools are not installed and if they require higher privileges.')
 
 shutdown_button_parser_actions = (
-    'configure-shutdown-service',
-    'uninstall-shutdown-service'
+    'configure',
+    'uninstall'
 )
-shutdown_button_parser.add_argument(action='store', choices=shutdown_button_parser_actions, dest='action_shutdown_button', help='Commands for configuring/uninstalling the shutdown button of the GoPiGo3.')
+shutdown_button_parser.add_argument(action='store', choices=shutdown_button_parser_actions, dest='action_shutdown_button', help='Commands for configuring/uninstalling the shutdown button of the GoPiGo3. \
+Having it installed, allows the user to shutdown the Pi, by pressing on the button found on the GoPiGo3.')
 #############################################################
 
-def run_command(command, cwd = None):
+def run_command(command, cwd = None, get_output_instead = False, console_out = True):
     process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE, cwd = cwd, close_fds=True, bufsize=1)
+
+    output_instead = ""
     for line in iter(process.stdout.readline, b''):
-        print(line.decode('utf-8').strip('\n'))
+        line_output = line.decode('utf-8')
+        if console_out:
+            pass#print(line_output.strip('\n'))
+        if get_output_instead:
+            output_instead += line_output
+
     process.stdout.close()
     process.wait()
     rc = process.poll()
-    return rc
+
+    if get_output_instead:
+        return output_instead
+    else:
+        return rc
 
 def main():
     # parsing command line arguments
@@ -153,9 +165,9 @@ def main():
             try:
                 gpg3 = gopigo3.GoPiGo3()
 
-                if args.action_check == 'fw-version':
+                if args.action_check == 'fw':
                     print("v" + gpg3.get_version_firmware())
-                elif args.action_check == 'hw-version':
+                elif args.action_check == 'hw':
                     print('v' + gpg3.get_version_hardware())
                 elif args.action_check == 'info':
                     print("Manufacturer    : ", gpg3.get_manufacturer())  # read and display the serial number
@@ -180,15 +192,14 @@ def main():
 
         elif 'action_firmware' in dict_args:
             if args.action_firmware == 'burn':
-                import os
                 import pkg_resources as pkg
-                updater_path = pkg.resource_filename('gopigo3', 'additional-files/openocd_updater.sh')
+                updater_path = pkg.resource_filename('gopigo3', 'additional-files/firmware_burner.sh')
                 updater_dir = pkg.resource_filename('gopigo3', 'additional-files')
 
                 if args.sudo:
-                    status = run_command('sudo bash ' + updater_path, cwd = updater_dir)
+                    status = run_command('sudo bash ' + updater_path, cwd=updater_dir)
                 else:
-                    status = run_command('bash ' + updater_path, cwd = updater_dir)
+                    status = run_command('bash ' + updater_path, cwd=updater_dir)
 
                 print('============================================')
                 if status == 0:
@@ -197,7 +208,39 @@ def main():
                     print('The firmware couldn\'t be flashed on the GoPiGo3.')
 
         elif 'action_shutdown_button' in dict_args:
-            pass
+            if args.action_shutdown_button == 'configure':
+                import pkg_resources as pkg
+
+                if '0 loaded' in run_command('systemctl list-units --type=service | grep gpg3_power.service', get_output_instead=True, console_out=False):
+                    # this means nothing is installed yet
+
+                    additional_files_path = pkg.resource_filename('gopigo3', 'additional-files')
+                    runnable_path = additional_files_path + '/gpg3_power.py'
+                    service_path = additional_files_path + '/gpg3_power.service'
+
+                    run_command('sudo mkdir gopigo3', cwd='/opt/', console_out = False)
+                    run_command('sudo cp ' + runnable_path + ' /opt/gopigo3/', console_out = False)
+                    run_command('sudo cp ' + service_path + ' /lib/systemd/system/', console_out = False)
+                    run_command('sudo systemctl daemon-reload', console_out = False)
+
+                    run_command('sudo systemctl enable gpg3_power.service', console_out = False)
+                    run_command('sudo systemctl start gpg3_power.service', console_out = False)
+
+                else:
+                    # this means the service is installed but not activated/enabled
+                    run_command('sudo systemctl enable gpg3_power.service', console_out = False)
+                    run_command('sudo systemctl start gpg3_power.service', console_out = False)
+                    run_command('sudo systemctl start gpg3_power.service', console_out = False)
+
+            elif args.action_shutdown_button == 'uninstall':
+
+                run_command('sudo systemctl -q stop gpg3_power.service', console_out = False)
+                run_command('sudo systemctl -q disable gpg3_power.service', console_out = False)
+                run_command('sudo rm -f /lib/systemd/system/gpg3_power.service', console_out = False)
+                run_command('sudo systemctl daemon-reload', console_out = False)
+
+                run_command('sudo rm -rf /opt/gopigo3', console_out = False)
+
         else:
             import pkg_resources as pkg
             from rst2ansi import rst2ansi

@@ -1,0 +1,9 @@
+[Unit]
+Description=GoPiGo3 Power Service
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/env python  /opt/gopigo3/gpg3_power.py
+
+[Install]
+WantedBy=multi-user.target
