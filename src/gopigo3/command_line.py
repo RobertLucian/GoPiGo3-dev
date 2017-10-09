@@ -68,7 +68,7 @@ def run_command(command, cwd = None, get_output_instead = False, console_out = T
     for line in iter(process.stdout.readline, b''):
         line_output = line.decode('utf-8')
         if console_out:
-            pass#print(line_output.strip('\n'))
+            print(line_output.strip('\n'))
         if get_output_instead:
             output_instead += line_output
 
