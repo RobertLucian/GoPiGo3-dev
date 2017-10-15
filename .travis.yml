@@ -2,4 +2,4 @@ language: python
 install:
   - pip install wheel
 script:
-  - build.sh
+  - bash build.sh
