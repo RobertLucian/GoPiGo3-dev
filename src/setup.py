@@ -5,7 +5,7 @@ def readme():
         return f.read()
 
 setup(
-    name='gopigo3-dev',
+    name='travis_package_name',
     version='0.1.0',
 
     description='DexterIndustries Library for the GoPiGo3.',

@@ -1,5 +1,29 @@
 language: python
-install:
-  - pip install wheel
 script:
-  - bash build.sh
+- bash build.sh
+deploy:
+  skip_cleanup: true
+  provider: packagecloud
+  repository: "develop"
+  username: "obotheeagle@gmail.com"
+  token:
+    secure: SGzKPKI2BlHI2bqv4DTB1DikED2WmNxYBfcmot2dKaFJ2pZ5Vcy2FSJUKfpSM80DqHQj0R1+uAz2sSirXd1HE/iYAXfejwUGbYWQXy59e9UIbHKi61/2Vx4lscNr3w1sfNbHiExvqWc9K6P+yAq42rf9dfE1UiGjk3x4PzuOCzHjxav/NtoMiVGBSNZZfZdCHER5UxL4dNyEgCpZc+jjh0zDhUM1VBg0SDh6ZVLe58+Y8sOWyzBdkJV2QOL103HsYJ6vMXjAI4JnMIgY9h6xTaJ2GlTxk22NnN17Wih15wvoqWbWAwujGZq/QpBmiLcSMh1/1ZMY4l1RFKSRj0z9kwbg09GPR/2lmWHKAZLja+QH0bh4OcUbOPILasgyQl7LZt4lqKDI/dpCEiPQpWpLrPsR+TlL9Lf/x6bNIugHMuQ312fJUfjh4winKp21uiavUdavTA4XQxVRzdxYToVRqC4ONHLg+ZeclENwdszGzZ+AMj84Y1sje3uqwXJQ2w9bFM1F+Mgo9SLjYowHnhlv7kc9oJmLrLpFGyYR+iiVQgyPS1lpxYY2j4qvAe5fhJfc53jkSFA7ekyqw071FV2PGXeVUxcGE+VHmBPIrXbh0wtBIkwcuOuzjQI9IK8m4DZmttRa8BvSTZbdZAWM0gM9Iz+jDSHMiouUL8srugQiIxI=
+  dist: "python"
+  local-dir: src/dist
+
+# language: python
+# python:
+#   - "2.6"
+#   - "2.7"
+#   - "3.4"
+#   - "3.5"
+#   - "3.6"
+#   # PyPy versions
+#   - "pypy"   # PyPy2 5.8.0
+#   - "pypy3"  # Pypy3 5.8.0-beta0
+# # command to install dependencies
+# install:
+#   - pip install .
+#   - pip install -r requirements.txt
+# # command to run tests
+# script: pytest
