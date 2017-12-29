@@ -16,10 +16,10 @@ PACKAGE_VERSION=$PACKAGE_TOREPLACE_VERSION
 # append to package name the branch name
 # and
 # append the build number to version
-if [ $TRAVIS_PULL_REQUEST_BRANCH == "" ]; then
+if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]];
 
   # do the appending if only the branch is not master
-  if [ ! $TRAVIS_BRANCH == "master" ]; then
+  if [[ ! $TRAVIS_BRANCH == "master" ]];
     PACKAGE_NAME="$PACKAGE_NAME-$(sed 's/\//-/g' <<< $TRAVIS_BRANCH)"
     PACKAGE_VERSION="$PACKAGE_VERSION.$TRAVIS_BUILD_NUMBER"
   fi
