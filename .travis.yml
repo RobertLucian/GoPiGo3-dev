@@ -1,10 +1,10 @@
 language: python
-install:
-  - gem install package_cloud
 before_script:
   - chmod +x semantic_release.sh && ./semantic_release.sh
 script:
   - chmod +x build.sh && ./build.sh
+before_deploy:
+  - gem install package_cloud
 deploy:
   skip_cleanup: true
   provider: script
