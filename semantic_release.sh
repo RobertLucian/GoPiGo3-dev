@@ -30,6 +30,8 @@ PACKAGE_TOREPLACE_VERSION=$(python setup.py --version)
 PACKAGE_NAME="gopigo3"
 PACKAGE_VERSION=$PACKAGE_TOREPLACE_VERSION
 
+DATE=`date +%Y.%d`
+
 # append to package name the branch name
 # and
 # append the build number to version
@@ -45,7 +47,7 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
   # check if we've got the develop branch
   elif [[ $TRAVIS_BRANCH == "develop" ]]; then
     PACKAGE_NAME="${PACKAGE_NAME}-develop"
-    PACKAGE_VERSION="${TRAVIS_BUILD_NUMBER}.dev"
+    PACKAGE_VERSION="${DATE}.dev${TRAVIS_BUILD_NUMBER}"
 
   # check if we have a branch with a slash in it
   elif [[ $TRAVIS_BRANCH == *\/* ]]; then
@@ -67,7 +69,7 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
     # otherwise set the package name and version
     else
       PACKAGE_NAME="${PACKAGE_NAME}-$(sed 's/\//-/g' <<< ${TRAVIS_BRANCH})"
-      PACKAGE_VERSION="${TRAVIS_BUILD_NUMBER}.dev"
+      PACKAGE_VERSION="${DATE}.dev${TRAVIS_BUILD_NUMBER}"
     fi
   else
     unknown_branch
@@ -77,7 +79,7 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
 else
   # if we have a PR build
   PACKAGE_NAME="${PACKAGE_NAME}-$(sed 's/\//-/g' <<< ${TRAVIS_PULL_REQUEST_BRANCH})"
-  PACKAGE_VERSION="${TRAVIS_BUILD_NUMBER}"
+  PACKAGE_VERSION="${DATE}.dev${TRAVIS_BUILD_NUMBER}"
 fi
 
 sed -i -e 's/'"${PACKAGE_TOREPLACE_NAME}"'/'"${PACKAGE_NAME}"'/g' setup.py
