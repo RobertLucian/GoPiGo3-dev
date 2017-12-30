@@ -8,7 +8,7 @@ before_deploy:
 deploy:
   skip_cleanup: true
   provider: script
-  script: chmod +x deploy.sh && ./deploy.sh
+  script: bash deploy.sh
   on:
     all_branches: true
 env:
