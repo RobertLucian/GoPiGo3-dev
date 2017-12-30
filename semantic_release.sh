@@ -13,7 +13,7 @@ declare -a ACCEPTED_DEVBRANCHES=(
 )
 
 # function for displaying the allowed patterns for branches
-unknown_branch() {
+unknown_branch () {
   echo "Current branch detected: ${TRAVIS_BRANCH}"
   echo "The following patterns for branches are accepted:"
   for branch in "${ACCEPTED_DEVBRANCHES[@]}"
@@ -63,7 +63,7 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
     # if the branch doesn't fit our patterns
     # then let the build fail
     if [[ $var != 1 ]]; then
-      unknown_branch()
+      unknown_branch
       exit 3
     # otherwise set the package name and version
     else
@@ -71,7 +71,7 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
       PACKAGE_VERSION="${TRAVIS_BUILD_NUMBER}.dev"
     fi
   else
-    unknown_branch()
+    unknown_branch
     exit 3
   fi
   echo "Releasing $PACKAGE_NAME=$PACKAGE_VERSION.dev"
