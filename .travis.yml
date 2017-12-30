@@ -2,13 +2,13 @@ language: python
 install:
   - gem install package_cloud
 before_script:
-  - bash semantic_release.sh
+  - chmod +x semantic_release.sh && ./semantic_release.sh
 script:
-  - bash build.sh
+  - chmod +x build.sh && ./build.sh
 deploy:
   skip_cleanup: true
   provider: script
-  script: deploy.sh
+  script: chmod +x deploy.sh && ./deploy.sh
   on:
     all_branches: true
 env:
