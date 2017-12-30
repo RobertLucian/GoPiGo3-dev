@@ -54,7 +54,7 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
     var=0
     for branch in "${ACCEPTED_DEVBRANCHES[@]}"
     do
-       if [[ "TYPE_BRANCH" == "${branch}" ]]; then
+       if [[ "${TYPE_BRANCH}" == "${branch}" ]]; then
          var=$((var + 1))
        fi
     done
