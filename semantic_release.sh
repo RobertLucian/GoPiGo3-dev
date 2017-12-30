@@ -48,8 +48,7 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
     PACKAGE_VERSION="${TRAVIS_BUILD_NUMBER}.dev"
 
   # check if we have a branch with a slash in it
-  elif [[ $TRAVIS_BRANCH == "*\/*" ]]; then
-    echo "aiiaicisicicd"
+  elif [[ $TRAVIS_BRANCH == *\/* ]]; then
     # check if the branch follows the provided pattern
     TYPE_BRANCH=$(sed 's/\/.*//' <<< ${TRAVIS_BRANCH})
     $var=0
@@ -59,7 +58,6 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
          var=$((var + 1))
        fi
     done
-    echo "${var}aiiaicisici"
 
     # if the branch doesn't fit our patterns
     # then let the build fail
