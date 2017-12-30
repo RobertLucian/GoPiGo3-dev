@@ -30,7 +30,7 @@ PACKAGE_TOREPLACE_VERSION=$(python setup.py --version)
 PACKAGE_NAME="gopigo3"
 PACKAGE_VERSION=$PACKAGE_TOREPLACE_VERSION
 
-DATE=`date +%Y.%d`
+DATE=`date +%Y.%m`
 
 # append to package name the branch name
 # and
