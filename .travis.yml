@@ -15,12 +15,7 @@ deploy:
     dist: "python"
     local-dir: src/dist
     on:
-      branches: 
-        - develop
-        - /^feature\/.*$/
-        - /^hotfix\/.*$/
-        - /^fix\/.*$/
-        - /^release\/.*$/
+      all_branches: true
 env:
   global:
     secure: HWSa6B61xuIM4VQvxVjYhWo/S3oA1+eHSmCmjWHDYorWqs/wyLoqMPlWk9hdnKerYTLrXFOFZ3OFu0ad4aD/ORCfpFPINPuVFHraksmfaGHSD3TYmGSijvgP8nRQqL16KqoLG9tKwdT4GWqjA8bMUIkW/FH7Vxt/yZRdDvoeyDpwGFo4aCVwiPU+11wmC+jnLf41SEm4hyjuyiacwOhSqYlGeUplM0Gqv6+MmGUM/lsm6ePHaS9QLmWRUwlqzkPwP7s3IyuWJaAejb1s6ZRkJEInbNtISCNgDjnrNIZf6ar+c+/PVqSOdJIKAwF1MwmSMhQ/GNBWCyP0w4e2IWdA4Dwe6JE0HvgoYfC6aRMpQzYYDfKw+QoxwDUw+QO7DphK/g0MY2HLq94vt4TyOANo8oBKp3BH5D47iowus65Mj3/nXER9aaCHMf7jZYJbFqla4XVbBHCmPEiwfewyuxF4VzAoCTOAqcFNiCl/CTC7Zj57VSSMIU6Nlm3CZp6DeVCVF7hFo7ij5or0Z2Xv7XOxCN9Hc0Tzjal+OxnRgBH6c1LphdOG2ydsderQJ/suirEUpuRUhtpKHrYphoC/Kv4xKzbqKeOB/Myl9BuS3dWKuQ5R0QAem6NsAYudpsPQxMqlVUJSpc+RxyWsCKKa0K9RQLpw6zlsl66PmONMGofMwKw=
