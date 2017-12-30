@@ -51,7 +51,7 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
   elif [[ $TRAVIS_BRANCH == *\/* ]]; then
     # check if the branch follows the provided pattern
     TYPE_BRANCH=$(sed 's/\/.*//' <<< ${TRAVIS_BRANCH})
-    $var=0
+    var=0
     for branch in "${ACCEPTED_DEVBRANCHES[@]}"
     do
        if [[ "TYPE_BRANCH" == "${branch}" ]]; then
