@@ -7,23 +7,23 @@ before_deploy:
   - gem install package_cloud
 deploy:
   skip_cleanup: true
-  provider: script
-  script: bash deploy.sh
-  on:
-    all_branches: true
+  - provider: packagecloud
+    repository: "develop"
+    username: "twine"
+    token:
+      secure: "${PACKAGE_CLOUD}"
+    dist: "python"
+    local-dir: src/dist
+    on:
+      branches: 
+        - develop
+        - /^feature\/.*$/
+        - /^hotfix\/.*$/
+        - /^fix\/.*$/
+        - /^release\/.*$/
 env:
   global:
     secure: HWSa6B61xuIM4VQvxVjYhWo/S3oA1+eHSmCmjWHDYorWqs/wyLoqMPlWk9hdnKerYTLrXFOFZ3OFu0ad4aD/ORCfpFPINPuVFHraksmfaGHSD3TYmGSijvgP8nRQqL16KqoLG9tKwdT4GWqjA8bMUIkW/FH7Vxt/yZRdDvoeyDpwGFo4aCVwiPU+11wmC+jnLf41SEm4hyjuyiacwOhSqYlGeUplM0Gqv6+MmGUM/lsm6ePHaS9QLmWRUwlqzkPwP7s3IyuWJaAejb1s6ZRkJEInbNtISCNgDjnrNIZf6ar+c+/PVqSOdJIKAwF1MwmSMhQ/GNBWCyP0w4e2IWdA4Dwe6JE0HvgoYfC6aRMpQzYYDfKw+QoxwDUw+QO7DphK/g0MY2HLq94vt4TyOANo8oBKp3BH5D47iowus65Mj3/nXER9aaCHMf7jZYJbFqla4XVbBHCmPEiwfewyuxF4VzAoCTOAqcFNiCl/CTC7Zj57VSSMIU6Nlm3CZp6DeVCVF7hFo7ij5or0Z2Xv7XOxCN9Hc0Tzjal+OxnRgBH6c1LphdOG2ydsderQJ/suirEUpuRUhtpKHrYphoC/Kv4xKzbqKeOB/Myl9BuS3dWKuQ5R0QAem6NsAYudpsPQxMqlVUJSpc+RxyWsCKKa0K9RQLpw6zlsl66PmONMGofMwKw=
 
-# deploy:
-#   skip_cleanup: true
-#   provider: packagecloud
-#   repository: "develop"
-#   username: "twine"
-#   token:
-#     secure: SGzKPKI2BlHI2bqv4DTB1DikED2WmNxYBfcmot2dKaFJ2pZ5Vcy2FSJUKfpSM80DqHQj0R1+uAz2sSirXd1HE/iYAXfejwUGbYWQXy59e9UIbHKi61/2Vx4lscNr3w1sfNbHiExvqWc9K6P+yAq42rf9dfE1UiGjk3x4PzuOCzHjxav/NtoMiVGBSNZZfZdCHER5UxL4dNyEgCpZc+jjh0zDhUM1VBg0SDh6ZVLe58+Y8sOWyzBdkJV2QOL103HsYJ6vMXjAI4JnMIgY9h6xTaJ2GlTxk22NnN17Wih15wvoqWbWAwujGZq/QpBmiLcSMh1/1ZMY4l1RFKSRj0z9kwbg09GPR/2lmWHKAZLja+QH0bh4OcUbOPILasgyQl7LZt4lqKDI/dpCEiPQpWpLrPsR+TlL9Lf/x6bNIugHMuQ312fJUfjh4winKp21uiavUdavTA4XQxVRzdxYToVRqC4ONHLg+ZeclENwdszGzZ+AMj84Y1sje3uqwXJQ2w9bFM1F+Mgo9SLjYowHnhlv7kc9oJmLrLpFGyYR+iiVQgyPS1lpxYY2j4qvAe5fhJfc53jkSFA7ekyqw071FV2PGXeVUxcGE+VHmBPIrXbh0wtBIkwcuOuzjQI9IK8m4DZmttRa8BvSTZbdZAWM0gM9Iz+jDSHMiouUL8srugQiIxI=
-#   dist: "python"
-#   local-dir: src/dist
-#   on:
-#     all_branches: true
+
 
