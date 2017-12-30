@@ -6,9 +6,9 @@ set -e
 pushd src/
 
 declare -a ACCEPTED_DEVBRANCHES=(
-"feature",
-"release",
-"fix",
+"feature"
+"release"
+"fix"
 "hotfix"
 )
 
