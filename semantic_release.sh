@@ -49,6 +49,14 @@ do_master_release () {
     echo "Version number not changed, so not creating a new release"
   fi
 }
+
+get_package_version_on_master () {
+  last_tag=$(git describe --tags --abbrev=0)
+  git log $last_tag HEAD --pretty=format:"%s%n%b" > changelog.txt
+  next_version=$(python ../process_changelog.py $last_tag changelog.txt release.json)
+
+  echo $next_version
+}
 # function for displaying the allowed patterns for branches
 
 PACKAGE_TOREPLACE_NAME=$(python setup.py --name)
@@ -72,6 +80,7 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
   if [[ $TRAVIS_BRANCH == "master" ]]; then
     echo "Creating release on ${TRAVIS_BRANCH}"
     PACKAGE_NAME="${PACKAGE_NAME}"
+    PACKAGE_VERSION=$(get_package_version_on_master)
     do_master_release
 
   # if it's a develop branch then use the date and the build number
@@ -111,7 +120,8 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
     unknown_branch
     exit 2
   fi
-  echo "Releasing $PACKAGE_NAME=$PACKAGE_VERSION.dev"
+  
+  echo "Releasing ${PACKAGE_NAME}=${PACKAGE_VERSION}"
 else
   # if we have a PR build
   echo "PR build detected on branch ${TRAVIS_PULL_REQUEST_BRANCH}"

@@ -57,7 +57,7 @@ def analyzeCommits(filename):
                 found_breakingchange = False
 
             elif found_at_sign is not None:
-                if line != "\n":
+                if line != "\r\n" and line != "\n":
                     if found_body is False:
                         found_body = True
                         line = line.lstrip().rstrip()
