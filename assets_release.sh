@@ -6,7 +6,8 @@ pushd src
 
 if [[ -f release_id.txt ]]; then
   ID=$(cat release_id.txt)
-  PYTHON_PKG_NAME="PythonPackage"
+  PYTHON_PKG_NAME=$(ls dist | head -n 1)
+  PYTHON_PKG_LABEL="python-targz-archive"
   PYTHON_PKG_FILENAME=$(ls dist | head -n 1)
 
   echo "Publishing python wheel with GitHub API"
