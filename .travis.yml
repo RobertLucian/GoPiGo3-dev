@@ -15,10 +15,6 @@ deploy:
   local-dir: src/dist
   on:
     all_branches: true
-after_deploy:
-  skip_cleanup: true
-  provider: script
-
 env:
   global:
       secure: kkHSL5YIrOYvWIMZyXaTVg5QV0mv9GrUPwmmvi3Y3chXBzlhqdnlni6xWHqAxgouUdOcAuvwJhoe+jBMAk1NcbHcIFXmKLyWcCsTj+OSGdBOMjwQ88xWQ9bW4hXFi2McofpXhKg+m5zpX5XDehTUZ5MRfMwSeJl4vfHWcFDrda4F8A1AZ+euySo2jUUfRKeFrJYMKAJt0NyXoN4GbfPCNZotgQcjGqzHtwcligbXQg//TKyHW3QpIDhxny0XBsoFz3a30Y/+lw3CDv9MRVtlngHHHJ1/zcRYhe5VjP27wXbEa/UQoxhDk7wK9J5bq4uMQqsWe5+WQksQWl69uG0DdvQlE7qSN9bRfLJqPHrV2uikoV/+MuLmFi87gU1To6pwFU0l4oh+PsQCt8gcnJuK7nDI4rqAMan9pDqFwrGWRnNmTvLITaM8PMYgW96O+PZI9KmLIcwyeujk71e8y64nqzQKLAZGNM/GhX2mhMwwpBeny70HjP0NV8IU3f5yQrrTPWtmQcUpxqPImk5h4PT2GvIzbv056eFkWUr/YP22/yB23CMubyMEZBZIXwwX/w0XLb2VnEGOhSN8n2LhvTQE9pjhG0QhpSOhoj8X3xWOApD23XTlbFI5CmFmuKMBj3L/0uNZ321ZqNGm/dxX7jaBUkv7d9xS2Dgh523tvGh1bDI=
