@@ -80,7 +80,7 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
   if [[ $TRAVIS_BRANCH == "master" ]]; then
     echo "Creating release on ${TRAVIS_BRANCH}"
     PACKAGE_NAME="${PACKAGE_NAME}"
-    PACKAGE_VERSION="${get_package_version_on_master}"
+    PACKAGE_VERSION=$(get_package_version_on_master)
     do_master_release
 
   # if it's a develop branch then use the date and the build number
