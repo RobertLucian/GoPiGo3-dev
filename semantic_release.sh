@@ -15,6 +15,40 @@ declare -a ACCEPTED_DEVBRANCHES=(
 "hotfix"
 )
 
+unknown_branch () {
+  echo "Current branch detected: ${TRAVIS_BRANCH}"
+  echo "The following patterns for branches are accepted:"
+  for branch in "${ACCEPTED_DEVBRANCHES[@]}"
+  do
+     echo "branch allowed: ${branch}/*"
+  done
+  echo "branch allowed: develop"
+  echo "branch allowed: master"
+}
+
+do_master_release () {
+  last_tag=$(git describe --tags --abbrev=0)
+  echo "Reading and parsing commit messages since tag $last_tag"
+
+  git log $last_tag HEAD --pretty=format:"%s%n%b" > changelog.txt
+  python process_changelog.py $last_tag changelog.txt release.json
+
+  if [[ -f release.json ]]; then
+    export PYTHONIOENCODING=utf8
+
+    echo "Creating new release on GitHub on ${TRAVIS_REPO_SLUG}"
+    ID=$(curl -X POST https://api.github.com/repos/$TRAVIS_REPO_SLUG/releases?access_token=$GH_TOKEN --header "Content-Type: application/json" -d @release.json | \
+      python -c "import sys, json; response = json.load(sys.stdin); out = response['id'] if 'id' in response else -1; print(out);")
+    if [[ ID == -1 ]]; then
+      echo "Bad response on publishing release with GitHub API"
+      exit 3
+    else
+      echo $ID > release_id.txt
+    fi
+  else
+    echo "Version number not changed, so not creating a new release"
+  fi
+}
 # function for displaying the allowed patterns for branches
 
 PACKAGE_TOREPLACE_NAME=$(python setup.py --name)
@@ -87,40 +121,5 @@ fi
 
 sed -i -e 's/'"${PACKAGE_TOREPLACE_NAME}"'/'"${PACKAGE_NAME}"'/g' setup.py
 sed -i -e 's/'"${PACKAGE_TOREPLACE_VERSION}"'/'"${PACKAGE_VERSION}"'/g' setup.py
-
-unknown_branch () {
-  echo "Current branch detected: ${TRAVIS_BRANCH}"
-  echo "The following patterns for branches are accepted:"
-  for branch in "${ACCEPTED_DEVBRANCHES[@]}"
-  do
-     echo "branch allowed: ${branch}/*"
-  done
-  echo "branch allowed: develop"
-  echo "branch allowed: master"
-}
-
-do_master_release () {
-  last_tag=$(git describe --tags --abbrev=0)
-  echo "Reading and parsing commit messages since tag $last_tag"
-
-  git log $last_tag HEAD --pretty=format:"%s%n%b" > changelog.txt
-  python process_changelog.py $last_tag changelog.txt release.json
-
-  if [[ -f release.json ]]; then
-    export PYTHONIOENCODING=utf8
-
-    echo "Creating new release on GitHub on ${TRAVIS_REPO_SLUG}"
-    ID=$(curl -X POST https://api.github.com/repos/$TRAVIS_REPO_SLUG/releases?access_token=$GH_TOKEN --header "Content-Type: application/json" -d @release.json | \
-      python -c "import sys, json; response = json.load(sys.stdin); out = response['id'] if 'id' in response else -1; print(out);")
-    if [[ ID == -1 ]]; then
-      echo "Bad response on publishing release with GitHub API"
-      exit 3
-    else
-      echo $ID > release_id.txt
-    fi
-  else
-    echo "Version number not changed, so not creating a new release"
-  fi
-}
 
 popd
