@@ -49,7 +49,6 @@ do_master_release () {
     echo "Version number not changed, so not creating a new release"
   fi
 }
-
 # function for displaying the allowed patterns for branches
 
 PACKAGE_TOREPLACE_NAME=$(python setup.py --name)
