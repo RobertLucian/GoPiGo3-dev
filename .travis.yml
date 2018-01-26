@@ -3,6 +3,7 @@ before_script:
   - chmod +x semantic_release.sh && ./semantic_release.sh
 script:
   - chmod +x build.sh && ./build.sh
+  - chmod +x assets_release.sh && ./assets_release.sh
 deploy:
   skip_cleanup: true
   provider: packagecloud
@@ -14,6 +15,11 @@ deploy:
   local-dir: src/dist
   on:
     all_branches: true
+after_deploy:
+  skip_cleanup: true
+  provider: script
+
 env:
   global:
-    secure: URvQGYN1Z22mAchX3S+ker+c8hJD6E63AAA6t4gkBAxql3h8/EfleS6+y0XXgFd8boCcEMwWuKmat1iA+zesBoMMNoITRHWl53T5/SC9yKEfSg0HQRy0RYPdmkhFcQncqw0enMpeOniMb6lkLM2CnIfitMjnb0ieJwrsdOhS7Ru0AOwqzpGhJRtc6Eusb6YrzP+odtwYpCWyz6llg3Uu7qCpCYvhAbpywm7JQCmMXV0Li+AGL7fW0hfD10hMvBwM2ZJCL1g/58GFM0K0QBee+LQ5588j0ANFXxJh/KMMWtsQFUv/2jJdWYIWm396eaH3OSwosa+6t+yhr/uxDss6/mxPBJxXPsornRxrvfxhCXvLMqLXeHFzpwB0atbdwtu4NfyB6TzAMphkGkLCc7TT9+bE2e3rAQ6HP9rajcIeMM7EnlJjYlni77h+xOQPvyGF44UZZNTBgj1FPYMVN6kDGfGxYV9nxL8A/fcYa7HQTPvkQJ+hdR+9RoOHReOCPvqfSzwZKQq9v1X1h/hEhTC3Ig7UCqTdfu3HEUQf9qsJL/uJtRKUk8fDHlcLkJLBYJ773XAskRTs/3AyK7tjppFhBz6AsaI2v3DGgmVkOnbB2jNIcdtOlPoECzkpIIqCaAN9rovOroqpKAb7DTFr8pU4qMErFG6WuyLVjwC0zg1Sf58=
+      - secure: pB6cyUl6DW5hZA4EicWm02OTj4q/SV1Ivj/9qaCHKlokhdfUPcXVuOvX5Vh4fvr6ub+y3GlXuDCBDqDTJlrotW6V0UKqC5dzfexVH/5n6jBL+P/n5mB8GjjRzmAJmgAEWaa8WjC2J2JCh1cUMo3rs/AHDdYEdtVS0Ef+dv86M105pr4RrE1fRMQhQ/5FbXGCe61Zb13OL7xtS1Wy4QjRwISXHnGXh4kb$
+      - secure: jh8XovyWBPqEc+EUnAQ7RyTstJOlPr+0Dec56RXeo8/lT6YIhLX3zh2Mas5m4+XV51TxQpP9jxRwEWSXCW90RMsFNlc5MRvfKwbCwTJtEgyIkCej1ovp9DL3vF1N+M8DB9bMdKFrDpnHdEbSTFkj4dFz18JCiem30tTX+gW4PsqN52LkS56FNybE6iB5XTc/IrZ+wZ3h/W8Nb0qekBvryXlHgDyDjEQk$

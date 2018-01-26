@@ -3,6 +3,9 @@
 # exit if an exit code different than 0 is met
 set -e
 
+# this script is meant for labeling the python package accordingly
+# and for creating a release on GitHub for master branch
+
 pushd src/
 
 declare -a ACCEPTED_DEVBRANCHES=(
@@ -13,16 +16,6 @@ declare -a ACCEPTED_DEVBRANCHES=(
 )
 
 # function for displaying the allowed patterns for branches
-unknown_branch () {
-  echo "Current branch detected: ${TRAVIS_BRANCH}"
-  echo "The following patterns for branches are accepted:"
-  for branch in "${ACCEPTED_DEVBRANCHES[@]}"
-  do
-     echo "branch allowed: ${branch}/*"
-  done
-  echo "branch allowed: develop"
-  echo "branch allowed: master"
-}
 
 PACKAGE_TOREPLACE_NAME=$(python setup.py --name)
 PACKAGE_TOREPLACE_VERSION=$(python setup.py --version)
@@ -38,19 +31,27 @@ DATE=`date +%Y.%m`
 
 if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
 
-  # if we push to a branch
-  # do the appending if only the branch is not master
-  if [[ $TRAVIS_BRANCH == "master" ]]; then
-    PACKAGE_NAME="${PACKAGE_NAME}"
-    # semantic release on master
+  echo "Detected branch build on ${TRAVIS_BRANCH}"
 
-  # check if we've got the develop branch
+  # use version numbers (major, minor, patch)
+  # and create a release on github if branch is master
+  if [[ $TRAVIS_BRANCH == "master" ]]; then
+    echo "Creating release on ${TRAVIS_BRANCH}"
+    PACKAGE_NAME="${PACKAGE_NAME}"
+    do_master_release
+
+  # if it's a develop branch then use the date and the build number
+  # in the package's version
   elif [[ $TRAVIS_BRANCH == "develop" ]]; then
-    PACKAGE_NAME="${PACKAGE_NAME}-develop"
+    echo "Creating label for package on ${TRAVIS_BRANCH} branch"
+    PACKAGE_NAME="${PACKAGE_NAME}-${TRAVIS_BRANCH}"
     PACKAGE_VERSION="${DATE}.dev${TRAVIS_BUILD_NUMBER}"
 
   # check if we have a branch with a slash in it
+  # like feature/awesome-ftr, fix/annoying-issue, etc
+  # and then use the type of branch in the version of the package
   elif [[ $TRAVIS_BRANCH == *\/* ]]; then
+    echo "Detected branch with slash in it: ${TRAVIS_BRANCH}"
     # check if the branch follows the provided pattern
     TYPE_BRANCH=$(sed 's/\/.*//' <<< ${TRAVIS_BRANCH})
     var=0
@@ -65,23 +66,55 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
     # then let the build fail
     if [[ $var != 1 ]]; then
       unknown_branch
-      exit 3
+      exit 1
     # otherwise set the package name and version
     else
+      echo "Creating label for package on ${TRAVIS_BRANCH} branch"
       PACKAGE_NAME="${PACKAGE_NAME}-$(sed 's/\//-/g' <<< ${TRAVIS_BRANCH})"
       PACKAGE_VERSION="${DATE}.dev${TRAVIS_BUILD_NUMBER}"
     fi
   else
     unknown_branch
-    exit 3
+    exit 2
   fi
   echo "Releasing $PACKAGE_NAME=$PACKAGE_VERSION.dev"
 else
   # if we have a PR build
+  echo "PR build detected on branch ${TRAVIS_PULL_REQUEST_BRANCH}"
   PACKAGE_NAME="${PACKAGE_NAME}-$(sed 's/\//-/g' <<< ${TRAVIS_PULL_REQUEST_BRANCH})"
   PACKAGE_VERSION="${DATE}.dev${TRAVIS_BUILD_NUMBER}"
 fi
 
 sed -i -e 's/'"${PACKAGE_TOREPLACE_NAME}"'/'"${PACKAGE_NAME}"'/g' setup.py
 sed -i -e 's/'"${PACKAGE_TOREPLACE_VERSION}"'/'"${PACKAGE_VERSION}"'/g' setup.py
+
+unknown_branch () {
+  echo "Current branch detected: ${TRAVIS_BRANCH}"
+  echo "The following patterns for branches are accepted:"
+  for branch in "${ACCEPTED_DEVBRANCHES[@]}"
+  do
+     echo "branch allowed: ${branch}/*"
+  done
+  echo "branch allowed: develop"
+  echo "branch allowed: master"
+}
+
+do_master_release () {
+  last_tag=$(git describe --tags --abbrev=0)
+  echo "Reading and parsing commit messages since tag $last_tag"
+
+  git log $last_tag HEAD --pretty=format:"%s%n%b" > changelog.txt
+  python process_changelog.py $last_tag changelog.txt release.json
+
+  export PYTHONIOENCODING=utf8
+  ID=$(curl -X POST https://api.github.com/repos/$TRAVIS_REPO_SLUG/releases?access_token=$GH_TOKEN --header "Content-Type: application/json" -d @release.json | \
+    python -c "import sys, json; response = json.load(sys.stdin); out = response['id'] if 'id' in response else -1; print(out);")
+  if [[ ID == -1 ]]; then
+    echo "Bad response on publishing release with GitHub API"
+    exit 3
+  else
+    echo $ID > release_id.txt
+  fi
+}
+
 popd
