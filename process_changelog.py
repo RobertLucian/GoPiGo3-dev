@@ -53,6 +53,7 @@ def analyzeCommits(filename):
                 found_at_sign = True
                 found_body = False
                 stop_adding_body = False
+                stop_adding_to_breakingchange = False
                 found_breakingchange = False
 
             elif found_at_sign is not None:
@@ -70,12 +71,14 @@ def analyzeCommits(filename):
                             if "BREAKING CHANGE" in line:
                                 found_breakingchange = True
                                 line = line.split(":")[1].lstrip()
-                            if found_breakingchange is True:
+                            if found_breakingchange is True and stop_adding_to_breakingchange is False:
                                 if len(changelogs["breakingchange"][-1]) > 0:
                                     changelogs["breakingchange"][-1] += " "
                                 changelogs["breakingchange"][-1] += line
                 else:
                     stop_adding_body = found_body
+                    if found_breakingchange is True:
+                        stop_adding_to_breakingchange = True
 
     return changelogs
 
