@@ -1,0 +1,21 @@
+language: python
+before_script:
+  - chmod +x semantic_release.sh && ./semantic_release.sh
+script:
+  - chmod +x build.sh && ./build.sh
+  - chmod +x assets_release.sh && ./assets_release.sh
+deploy:
+  skip_cleanup: true
+  provider: packagecloud
+  repository: "develop"
+  username: "twine"
+  token:
+    secure: "${PACKAGECLOUD_TOKEN}"
+  dist: "python"
+  local-dir: src/dist
+  on:
+    all_branches: true
+env:
+  global:
+      secure: kkHSL5YIrOYvWIMZyXaTVg5QV0mv9GrUPwmmvi3Y3chXBzlhqdnlni6xWHqAxgouUdOcAuvwJhoe+jBMAk1NcbHcIFXmKLyWcCsTj+OSGdBOMjwQ88xWQ9bW4hXFi2McofpXhKg+m5zpX5XDehTUZ5MRfMwSeJl4vfHWcFDrda4F8A1AZ+euySo2jUUfRKeFrJYMKAJt0NyXoN4GbfPCNZotgQcjGqzHtwcligbXQg//TKyHW3QpIDhxny0XBsoFz3a30Y/+lw3CDv9MRVtlngHHHJ1/zcRYhe5VjP27wXbEa/UQoxhDk7wK9J5bq4uMQqsWe5+WQksQWl69uG0DdvQlE7qSN9bRfLJqPHrV2uikoV/+MuLmFi87gU1To6pwFU0l4oh+PsQCt8gcnJuK7nDI4rqAMan9pDqFwrGWRnNmTvLITaM8PMYgW96O+PZI9KmLIcwyeujk71e8y64nqzQKLAZGNM/GhX2mhMwwpBeny70HjP0NV8IU3f5yQrrTPWtmQcUpxqPImk5h4PT2GvIzbv056eFkWUr/YP22/yB23CMubyMEZBZIXwwX/w0XLb2VnEGOhSN8n2LhvTQE9pjhG0QhpSOhoj8X3xWOApD23XTlbFI5CmFmuKMBj3L/0uNZ321ZqNGm/dxX7jaBUkv7d9xS2Dgh523tvGh1bDI=
+      secure: M5V/cvJ6GZJAoqq0rnHMsWOmg+xEJrpSXHMj/s1uHzHmsNw1drKsi8zXlGAeoZDaRiOeBaPg72Mk07/fguU+J4SqQpwPXGMvIY2mNUfUppJjMG2p3Sg6Ph5Y63aSD6QV7s4xZYmx2AXq9BuCWOJnkyzZ1ZjfukEyyXOPoutdhZTmT6YE4H41qGNb/qactT/j56qKvqtUeWi0lG6h5RxsI6IfJloF7pX1QDsYDCMaAqSmdmoCzELnIH/I04P3+2/sj5eOLHaGJteiDqKGrqHEyYcxuLhUYBRcuPjJiSm/+eW/2DVHslJeJfqNpqPFBbY0ZSdTDXrUPDH4+x46ap+T+QDviW9CNofs8zb+UUEhaO+2jes2Mhq8lx1zEuWoaWOYG5/jUKdZeXhpi6dKN+eNZs4kRkZRm60tYZORGBZ+0F2A5HhsjkUzlvu5dkdxTuPWDi/FGUoZlewIRtCL8PZtSD6Ke1du69IVfcnuBL3N4/EzudUZ7UG1C6GvgAW77Fczoi5uJ88/R33YiN+56YcP7rHvvcjovfAf+dpWGDfMUjgtSX1jgidIInqkE7OHzoFxbl09XHFXlI2cP1ye2oAHR6ThGO/7ExAUgrGKDsXrb5pfJWooEx09EFy7QXv5vrTBcYAvuItj65LTJaTmcGSH8li5w/bX4k/yxPsqigib00w=
