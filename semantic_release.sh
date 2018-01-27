@@ -30,7 +30,7 @@ do_master_release () {
   last_tag=$(git describe --tags --abbrev=0)
   echo "Reading and parsing commit messages since tag $last_tag"
 
-  git log $last_tag HEAD --pretty=format:"%s%n%b" > changelog.txt
+  git log $last_tag..HEAD --pretty=format:"%s%n%b" > changelog.txt
   python ../process_changelog.py $last_tag changelog.txt release.json
 
   if [[ -f release.json ]]; then
