@@ -52,7 +52,7 @@ do_master_release () {
 
 get_package_version_on_master () {
   last_tag=$(git describe --tags --abbrev=0)
-  git log $last_tag HEAD --pretty=format:"%s%n%b" > changelog.txt
+  git log $last_tag..HEAD --pretty=format:"%s%n%b" > changelog.txt
   next_version=$(python ../process_changelog.py $last_tag changelog.txt release.json)
 
   echo $next_version
