@@ -1,7 +1,7 @@
 language: python
 branches:
   except:
-    - /^(\d+\.)?(\d+\.)?(\*|\d+)$/
+    - /^v(\d+\.)?(\d+\.)?(\*|\d+)$/
 before_script:
   - chmod +x semantic_release.sh && ./semantic_release.sh
 script:
