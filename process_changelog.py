@@ -97,7 +97,7 @@ def nextRelease(last_release, commits):
     elif "feature" in commits["type"]:
         minor += 1
         patch = 0
-    elif len(commits["type"]) > 2:
+    elif len(commits["type"]) > 0:
         patch += 1
 
     return "v{}.{}.{}".format(major, minor, patch)
