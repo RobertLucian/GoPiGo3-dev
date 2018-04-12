@@ -1,5 +1,6 @@
 import json
 import argparse
+import re
 from collections import OrderedDict
 
 global parser
@@ -20,7 +21,7 @@ def parseArguments():
 
 def analyzeCommits(filename):
     logs = []
-    changelogs = OrderedDict(
+    summary = OrderedDict(
         type = [],
         scope = [],
         summary = [],
@@ -29,58 +30,38 @@ def analyzeCommits(filename):
         size = 0
     )
 
-    with open(filename) as log:
-        found_at_sign = None
-        found_body = False
-        stop_adding_body = False
-        found_breakingchange = False
+    # example of a element stored in the json file
+    # {
+    #   "commit-hash": "11d07df4ce627d98bd30eb1e37c27ac9515c75ff",
+    #   "abbreviated-commit-hash": "11d07df",
+    #   "author-name": "Robert Lucian CHIRIAC",
+    #   "author-email": "robert.lucian.chiriac@gmail.com",
+    #   "author-date": "Sat, 27 Jan 2018 22:33:37 +0200",
+    #   "subject": "@fix(automation): patch versions aren't released",
+    #   "sanitized-subject-line": "fix-automation-patch-versions-aren-t-released",
+    #   "body": "Nothing else to add. Fixes #24.",
+    #   "commit-notes": ""
+    # }
+    with open(filename) as filelog:
+        changelog = json.load(filelog)
 
-        for line in log:
-            logs.append(line)
+        for index in range(len(changelog)):
+            subject = changelog[index]["subject"].replace('\n',' ').lstrip().rstrip()
+            body = changelog[index]["body"].lstrip().rstrip()
 
-            if "@" in line:
-                title, short_summary = line.split("@")[1].split(":")
-                type_commit = title[0:title.find("(")]
-                scope_commit = title[title.find("(") + 1:title.find(")"):]
-                short_summary = short_summary.lstrip().rstrip()
+            # pattern sample: "@fix(automation): patch versions aren't released"
+            pattern_subject = re.compile("^(@)(\w*)([(])(\w*)([):]{2})(\s)(.*)$")
+            components_subject = pattern_subject.findall(subject)
 
-                changelogs["type"].append(type_commit)
-                changelogs["scope"].append(scope_commit)
-                changelogs["summary"].append(short_summary)
-                changelogs["breakingchange"].append("")
-                changelogs["size"] += 1
+            if len(components_subject) > 0:
+                # it means we found the pattern in the subject of the commit message
+                # and take out the tuple out of the list
+                components_subject = components_subject[0]
+                summary["type"].append(components_subject[1])
+                summary["scope"].append(components_subject[3])
+                summary["size"] += 1
 
-                found_at_sign = True
-                found_body = False
-                stop_adding_body = False
-                stop_adding_to_breakingchange = False
-                found_breakingchange = False
-
-            elif found_at_sign is not None:
-                if line != "\r\n" and line != "\n":
-                    if found_body is False:
-                        found_body = True
-                        line = line.lstrip().rstrip()
-                        changelogs["body"].append(line)
-                    else:
-                        if stop_adding_body is False:
-                            line = line.lstrip().rstrip()
-                            changelogs["body"][-1] += " " + line
-                        else:
-                            line = line.lstrip().rstrip()
-                            if "BREAKING CHANGE" in line:
-                                found_breakingchange = True
-                                line = line.split(":")[1].lstrip()
-                            if found_breakingchange is True and stop_adding_to_breakingchange is False:
-                                if len(changelogs["breakingchange"][-1]) > 0:
-                                    changelogs["breakingchange"][-1] += " "
-                                changelogs["breakingchange"][-1] += line
-                else:
-                    stop_adding_body = found_body
-                    if found_breakingchange is True:
-                        stop_adding_to_breakingchange = True
-
-    return changelogs
+    return summary
 
 def nextRelease(last_release, commits):
     # getting rid of the 'v' letter in front of the version
