@@ -14,8 +14,12 @@ Body of the commit that ends up in the release note.
 Fixes #24, #23, #91
 BREAKING CHANGE: Added something that changed the API completely.
 ```
+
 The body of the commit, which is the **1st line** in the above paragraph *can be included or not*.
-The **2nd part** of the body, which is the footer has to start with one of the following keywords: `close|fixes|closes`. These keywords are case-insensitive, so you can shift-type them or not, but you can't use them in the first part of the body, which is the commit message that ends up in the release. This footer is *used for automatically closing mentioned issues when a PR is merged*. And the **3rd part** is again optional and it's required to be added *if to the code-base has been added a breaking change* - the required keyword for this is `BREAKING CHANGE: ` and it's case sensitive, so you have to type in caps.
+
+The **2nd part** of the body, which is the footer has to start with one of the following keywords: `close|fixes|closes`. These keywords are case-insensitive, so you can shift-type them or not, but you can't use them in the first part of the body, which is the commit message that ends up in the release. This footer is *used for automatically closing mentioned issues when a PR is merged*.
+
+And the **3rd part** is again optional and it's required to be added *if to the code-base has been added a breaking change* - the required keyword for this is `BREAKING CHANGE: ` and it's case sensitive, so you have to type in caps.
 
 ## Considerations on Commit Messages
 
