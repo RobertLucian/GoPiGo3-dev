@@ -7,8 +7,12 @@ Each commit message and body can be customized by following a given set of patte
 In order for a commit message/body to be taken into consideration by the semantic
 system, the following patterns has to be used:
 
-* **Message of the commit**: `@type(scope): message of the commit`. Mind that *"@,(,),: "* (*even the space after the colon*) symbols are all required in order for the commit message to taken into consideration. The only part where you can write anything is where the message fits in (i.e. `message of the commit`).
-* **Body of the commit**:
+#### Message of the Commit
+
+`@type(scope): message of the commit`.
+Mind that *"@,(,),: "* (*even the space after the colon*) symbols are all required in order for the commit message to taken into consideration. The only part where you can write anything is where the message fits in (i.e. `message of the commit`).
+
+#### Body of the Commit
 ```
 Body of the commit that ends up in the release note.
 Fixes #24, #23, #91
