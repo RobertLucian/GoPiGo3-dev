@@ -46,8 +46,8 @@ def analyzeCommits(filename):
         changelog = json.load(filelog)
 
         for index in range(len(changelog)):
-            subject = changelog[index]["subject"].replace('\n',' ').lstrip().rstrip()
-            body = changelog[index]["body"].lstrip().rstrip()
+            subject = changelog[index]["subject"].lstrip().rstrip()
+            body = changelog[index]["body"].replace("\n", "").lstrip().rstrip()
 
             # pattern sample: "@fix(automation): patch versions aren't released"
             pattern_subject = re.compile("^(@)(\w*)([(])(\w*)([):]{2})(\s)(.*)$")
@@ -59,7 +59,43 @@ def analyzeCommits(filename):
                 components_subject = components_subject[0]
                 summary["type"].append(components_subject[1])
                 summary["scope"].append(components_subject[3])
+                summary["summary"].append(components_subject[6])
                 summary["size"] += 1
+            else:
+                continue
+
+            breakingchange_and_others = re.compile("^(.*)((?i)(close|fixes|closes))(.*)(BREAKING CHANGE:)( ?)(.*)")
+            body_components = breakingchange_and_others.findall(body)
+
+            if len(body_components) > 0:
+                # we have a breaking change here and a footer mentioned fixed issues
+                body_components = body_components[0]
+                summary["body"].append(body_components[0])
+                summary["breakingchange"].append(body_components[6])
+                continue
+
+            breakingchange = re.compile("^(.*)(BREAKING CHANGE:)( ?)(.*)")
+            body_components = breakingchange.findall(body)
+
+            if len(body_components) > 0:
+                # we have a breaking change and that's it
+                body_components = body_components[0]
+                summary["body"].append(body_components[0])
+                summary["breakingchange"].append(body_components[3])
+                continue
+
+            footer = re.compile("^(.*)((?i)(close|fixes|closes))(.*)")
+            body_components = footer.findall(body)
+
+            if len(body_components) > 0:
+                # there's a footer and we also have a body message
+                body_components = body_components[0]
+                summary["body"].append(body_components[0])
+                summary["breakingchange"].append("")
+            else:
+                # no footer - just body message
+                summary["body"].append(body)
+                summary["breakingchange"].append("")
 
     return summary
 
@@ -109,9 +145,12 @@ def makeChangelog(commits):
             if key != "breakingchange":
                 changelog += "### {}\n\n".format(key.title())
                 for index_item in value:
-                    changelog += "* **{}**: {} **->** {}\n".format(commits["scope"][index_item],
-                                                        commits["summary"][index_item],
-                                                        commits["body"][index_item])
+                    changelog += "* **{}**: {} ".format(commits["scope"][index_item],
+                                                        commits["summary"][index_item])
+                    if len(commits["body"][index_item].strip(" .,:;!?")) > 0:
+                        changelog += "**->** {}\n".format(commits["body"][index_item])
+                    else:
+                        changelog += "\n"
             else:
                 changelog += "### Breaking Change\n"
                 for index_item in value:
