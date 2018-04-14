@@ -27,7 +27,7 @@ if ! { [ -f /usr/bin/openocd ] && [ -d /usr/local/share/openocd ]; }; then
 
 fi
 
-if [ $openocd_installed == 'yes' ] && if [ -w /usr/local/share/ ] && [ -w /usr/bin/ ]; then
+if [ $openocd_installed == 'yes' ] && [ -w /usr/local/share/ ] && [ -w /usr/bin/ ]; then
     # Gets the absolute path of the latest Firmware update
     FW_UPDATE_FILE=$(find "$PWD"/ -maxdepth 1 -name *.bin)
     echo "Updating the GoPiGo3 Firmware with '$FW_UPDATE_FILE'."
