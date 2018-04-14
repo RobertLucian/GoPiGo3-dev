@@ -89,11 +89,12 @@ def main():
     # the default name given to the following variable
     # must be the same as the name given in the setup.py
     # and it also must be an unique identifier in this file
-    insert_pkgname_here = 'travis_package_name'
+    insert_distname_here = 'travis_package_name'
+    pkgname = 'altgpg3'
 
     if args.version:
         import pkg_resources as pkg
-        print(insert_pkgname_here + ": " + pkg.get_distribution(insert_pkgname_here).version)
+        print(insert_pkgname_here + ": " + pkg.get_distribution(insert_distname_here).version)
     else:
 
         import spidev
@@ -197,8 +198,8 @@ def main():
         elif 'action_firmware' in dict_args:
             if args.action_firmware == 'burn':
                 import pkg_resources as pkg
-                updater_path = pkg.resource_filename(insert_pkgname_here, 'additional-files/firmware_burner.sh')
-                updater_dir = pkg.resource_filename(insert_pkgname_here, 'additional-files')
+                updater_path = pkg.resource_filename(pkgname, 'additional-files/firmware_burner.sh')
+                updater_dir = pkg.resource_filename(pkgname, 'additional-files')
 
                 if args.sudo:
                     status = run_command('sudo bash ' + updater_path, cwd=updater_dir)
@@ -218,7 +219,7 @@ def main():
                 if '0 loaded' in run_command('systemctl list-units --type=service | grep gpg3_power.service', get_output_instead=True, console_out=False):
                     # this means nothing is installed yet
 
-                    additional_files_path = pkg.resource_filename(insert_pkgname_here, 'additional-files')
+                    additional_files_path = pkg.resource_filename(pkgname, 'additional-files')
                     runnable_path = additional_files_path + '/gpg3_power.py'
                     service_path = additional_files_path + '/gpg3_power.service'
 
@@ -248,8 +249,8 @@ def main():
         else:
             import pkg_resources as pkg
             from rst2ansi import rst2ansi
-            readme_path = pkg.resource_filename(insert_pkgname_here, 'additional-files/README.rst')
+            readme_path = pkg.resource_filename(pkgname, 'additional-files/README.rst')
 
-            print('Enter \"' + insert_pkgname_here + ' -h\" or \"' + insert_pkgname_here + ' --help\" for instructions on how to use the command line to interface with the GoPiGo3\n')
+            print('Enter \"' + pkgname + ' -h\" or \"' + pkgname + ' --help\" for instructions on how to use the command line to interface with the GoPiGo3\n')
             with open(readme_path, 'r') as f:
                 print(rst2ansi(f.read().encode('utf-8')))
