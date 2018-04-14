@@ -94,7 +94,7 @@ def main():
 
     if args.version:
         import pkg_resources as pkg
-        print(insert_pkgname_here + ": " + pkg.get_distribution(insert_distname_here).version)
+        print(insert_distname_here + ": " + pkg.get_distribution(insert_distname_here).version)
     else:
 
         import spidev
