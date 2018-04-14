@@ -250,6 +250,6 @@ def main():
             from rst2ansi import rst2ansi
             readme_path = pkg.resource_filename(insert_pkgname_here, 'additional-files/README.rst')
 
-            print('Enter "' + insert_pkgname_here + ' -h" or "' + insert_pkgname_here ' --help" for instructions on how to use the command line to interface with the GoPiGo3\n')
+            print('Enter \"' + insert_pkgname_here + ' -h\" or \"' + insert_pkgname_here + ' --help\" for instructions on how to use the command line to interface with the GoPiGo3\n')
             with open(readme_path, 'r') as f:
                 print(rst2ansi(f.read().encode('utf-8')))
