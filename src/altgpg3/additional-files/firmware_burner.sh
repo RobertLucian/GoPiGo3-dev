@@ -27,12 +27,14 @@ if ! { [ -f /usr/bin/openocd ] && [ -d /usr/local/share/openocd ]; }; then
 
 fi
 
-if [ $openocd_installed == 'yes' ]; then
+if [ $openocd_installed == 'yes' ] && [ -w /usr/local/share/ ] && [ -w /usr/bin/ ]; then
     # Gets the absolute path of the latest Firmware update
-    FW_UPDATE_FILE=$(sudo find "$PWD"/ -maxdepth 1 -name *.bin)
+    FW_UPDATE_FILE=$(find "$PWD"/ -maxdepth 1 -name *.bin)
     echo "Updating the GoPiGo3 Firmware with '$FW_UPDATE_FILE'."
-    sudo openocd -f interface/raspberrypi2-native.cfg -c "transport select swd; set CHIPNAME at91samc20j18; source [find target/at91samdXX.cfg]; adapter_khz 250; adapter_nsrst_delay 100; adapter_nsrst_assert_width 100" -c "init; targets; reset halt; program $FW_UPDATE_FILE verify; reset" -c "shutdown"
+    openocd -f interface/raspberrypi2-native.cfg -c "transport select swd; set CHIPNAME at91samc20j18; source [find target/at91samdXX.cfg]; adapter_khz 250; adapter_nsrst_delay 100; adapter_nsrst_assert_width 100" -c "init; targets; reset halt; program $FW_UPDATE_FILE verify; reset" -c "shutdown"
     exit 0
 else
+    echo "Not enough permissions to flash firmware to GoPiGo3."
+    echo "Check the command line's helper."
     exit 1
 fi

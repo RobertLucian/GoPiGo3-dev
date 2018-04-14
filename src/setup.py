@@ -33,7 +33,7 @@ setup(
     packages=['altgpg3'],
     package_data={'altgpg3': ['additional-files/*']},
     include_package_data=True,
-    install_requires=['spidev', 'RPi.GPIO', 'rst2ansi', 'docutils'],
+    install_requires=['spidev', 'RPi.GPIO', 'rst2ansi', 'docutils', 'pygments'],
     entry_points=dict(console_scripts=['altgpg3=altgpg3.command_line:main']),
     zip_safe=True
 )
