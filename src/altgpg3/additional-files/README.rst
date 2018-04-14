@@ -90,4 +90,4 @@ Getting the manufacturer info, hw and fw versions, voltages, etc you can type in
 
   altgpg3 check info
 
-.. _gopigo3: https://github.com/DexterInd/GoPiGo3
+.. _gopigo3: https://www.dexterindustries.com/shop/gopigo-advanced-starter-kit/
