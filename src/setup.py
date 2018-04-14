@@ -1,7 +1,7 @@
 from setuptools import setup
 
 def readme():
-    with open('gopigo3/additional-files/README.rst') as f:
+    with open('altgpg3/additional-files/README.rst') as f:
         return f.read()
 
 setup(
