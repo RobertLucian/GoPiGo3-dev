@@ -54,8 +54,9 @@ do_master_release () {
 
 get_package_version_on_master () {
   last_tag=$(git describe --tags --abbrev=0)
-  git log $last_tag..HEAD --pretty=format:"%s%n%b" > changelog.txt
-  next_version=$(python ../process_changelog.py $last_tag changelog.txt release.json)
+  git log $last_tag..HEAD --pretty=format:'{%n  "commit": "%H",%n  "abbreviated_commit": "%h",%n  "tree": "%T",%n  "abbreviated_tree": "%t",%n  "parent": "%P",%n  "abbreviated_parent": "%p",%n  "refs": "%D",%n  "encoding": "%e",%n  "subject": "%s",%n  "sanitized_subject_line": "%f",%n  "body": "%b",%n  "commit_notes": "%N",%n  "verification_flag": "%G?",%n  "signer": "%GS",%n  "signer_key": "%GK",%n  "author": {%n    "name": "%aN",%n    "email": "%aE",%n    "date": "%aD"%n  },%n  "commiter": {%n    "name": "%cN",%n    "email": "%cE",%n    "date": "%cD"%n  }%n},' | sed "$ s/,$//" | sed ':a;N;$!ba;s/\r\n\([^{]\)/\\n\1/g'| awk 'BEGIN { print("[") } { print($0) } END { print("]") }' > changelog.json
+  awk -f ../sanitizer.awk changelog.json > changelog_sanitized.json
+  next_version=$(python ../process_changelog.py $last_tag changelog_sanitized.json release.json)
 
   echo $next_version
 }
@@ -123,7 +124,9 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
     exit 2
   fi
 
-  echo "Releasing ${PACKAGE_NAME}=${PACKAGE_VERSION}"
+  if [[ -z "$PACKAGE_VERSION" ]]; then
+    echo "Releasing ${PACKAGE_NAME}=${PACKAGE_VERSION}"
+  fi
 else
   # if we have a PR build
   echo "PR build detected on branch ${TRAVIS_PULL_REQUEST_BRANCH}"
