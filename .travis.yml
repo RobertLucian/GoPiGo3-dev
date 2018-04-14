@@ -22,6 +22,7 @@ deploy:
   local-dir: src/dist
   on:
     all_branches: true
+    condition: -f src/release_id.txt
 env:
   global:
     - secure: hDq1DJINIwKTTjL0zMOE9YGCo5q9zTCWdp2Yni3r7OonMD0jPjQyy6WT5eJ3C5/G6wXNevw8PMAGwIOy9k267VYJ3MIuNTPypnDeoNPKC6+wE7HP4Gef+CZGg+dSF7il4rIdCX3M76HkS9gYldG9Jp831uIWZRitTfuT787uNcWw36om5HGZyezXSp9PQzlQYhddwAldH8ZlTt5tbdc+6LBfSkQQJsnzsP+j7D4taHPlDRL/KSa3zTzwuNXm2sNimUMMDCgiBUsWNNpH+X+BMsZ1B9d3tRLaz4z2CNsoa/JS0qB7yWi/5/81Zu/B72SEXQAIhz/LhdGlZMd5ynJsxndyPXos/XLyukC7Sx0RDqmeZ5JdnYzK3aykIFncrpPyG7anrmLpSzgGRfNbbxZ6yYK8T7Acq3O/rspfUyysIBhxgkh5mBDplTPEnn5ZG30QX9czy5bXTW8uRu6Iit4X/2KIApytpcS2C2dWiDlyzp6M3THvm1AsRq3S/XjWr3wGE/eC5GtUjx5qD5b1Lfduq6sDH8ejdj+/ZDNlPkLSW2gl0onHi502+CrXczjAniy7SmSHXLNFa5iFHhvaC4AUXHobBnX9GO0BrbKUpqzVUsXSNofLG6zcBi/d4LR6lbTUoZX2DQbvmfw/mA/atIKgq+Mbj6Ci2+z8YMYKGsqEsd0=
