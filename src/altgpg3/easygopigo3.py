@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from gopigo3 import gopigo3
+from altgpg3 import gopigo3
 import time
 
 #####################################################################
@@ -644,7 +644,7 @@ class EasyGoPiGo3(gopigo3.GoPiGo3):
 
         """
         return SoundSensor(port, self)
-        
+
     def init_loudness_sensor(self, port = "AD1"):
         """
         | Initialises a :py:class:`~easygopigo3.LoudnessSensor` object and then returns it.
@@ -656,7 +656,7 @@ class EasyGoPiGo3(gopigo3.GoPiGo3):
 
         """
         return LoudnessSensor(port, self)
-               
+
 
     def init_ultrasonic_sensor(self, port = "AD1"):
         """
@@ -733,15 +733,15 @@ class EasyGoPiGo3(gopigo3.GoPiGo3):
     def init_motion_sensor(self, port="AD1"):
         """
         | Initialises a :py:class:`~easygopigo3.MotionSensor` object and then returns it
-        
+
         :param str port = "AD1": Can be set to either ``"AD1"`` or ``"AD2"``. Set by default to ``"AD1"``.
         :returns: An instance of the :py:class:`~easygopigo3.MotionSensor` class and with the port set to ``port``'s value.
 
         The ``"AD1"`` port is mapped to the following :ref:`hardware-ports-section`.
         """
-                
+
         return MotionSensor(port,self)
-        
+
 # the following functions may be redundant
 
 
@@ -1156,8 +1156,8 @@ class AnalogSensor(Sensor):
 
         """
         reading_percent = round(self.read() * 100 // self._max_value)
-        
-        # Some sensors - like the loudness_sensor - 
+
+        # Some sensors - like the loudness_sensor -
         # can actually return higher than 100% so let's clip it
         # and keep classrooms within an acceptable noise level
         if reading_percent > 100:
@@ -1405,7 +1405,7 @@ class LoudnessSensor(AnalogSensor):
         self._max_value = 1024  # based on empirical tests
 
 
-##########################        
+##########################
 
 
 class UltraSonicSensor(AnalogSensor):
@@ -1952,7 +1952,7 @@ class MotionSensor(DigitalSensor):
 
 
     """
-   
+
     def __init__(self, port="AD1", gpg=None):
         """
         Constructor for initializing a :py:class:`~easygopigo3.MotionSensor` object for the `Grove Motion Sensor`_.

@@ -64,7 +64,7 @@ get_package_version_on_master () {
 PACKAGE_TOREPLACE_NAME=$(python setup.py --name)
 PACKAGE_TOREPLACE_VERSION=$(python setup.py --version)
 
-PACKAGE_NAME="gopigo3"
+PACKAGE_NAME="altgpg3"
 PACKAGE_VERSION=$PACKAGE_TOREPLACE_VERSION
 
 DATE=`date +%Y.%m`
@@ -132,6 +132,7 @@ else
 fi
 
 sed -i -e 's/'"${PACKAGE_TOREPLACE_NAME}"'/'"${PACKAGE_NAME}"'/g' setup.py
+sed -i -e 's/'"${PACKAGE_TOREPLACE_NAME}"'/'"${PACKAGE_NAME}"'/g' altgpg3/command_line.py
 sed -i -e 's/'"${PACKAGE_TOREPLACE_VERSION}"'/'"${PACKAGE_VERSION}"'/g' setup.py
 
 popd
