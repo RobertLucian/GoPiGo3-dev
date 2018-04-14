@@ -124,7 +124,9 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
     exit 2
   fi
 
-  echo "Releasing ${PACKAGE_NAME}=${PACKAGE_VERSION}"
+  if [[ -z "$PACKAGE_VERSION" ]]; then
+    echo "Releasing ${PACKAGE_NAME}=${PACKAGE_VERSION}"
+  fi
 else
   # if we have a PR build
   echo "PR build detected on branch ${TRAVIS_PULL_REQUEST_BRANCH}"

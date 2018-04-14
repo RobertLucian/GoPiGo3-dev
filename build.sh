@@ -4,5 +4,7 @@
 set -e
 
 pushd src/
-python setup.py sdist
+if [[ -f release_id.txt ]]; then
+  python setup.py sdist
+fi
 popd
