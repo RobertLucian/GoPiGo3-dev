@@ -1,3 +1,40 @@
+# AltGPG3 - Alternative GoPiGo3 Library to the Official One [![Build Status](https://travis-ci.com/RobertLucian/AltGPG3.svg?token=zRic2qBaGDm1LBnLp8aP&branch=develop)](https://travis-ci.com/RobertLucian/AltGPG3)
+
+<img src="https://i.imgur.com/EH8amg1.jpg" width="600">
+
+This library represents an alternative to the [official one](https://github.com/DexterInd/GoPiGo3) of the [GoPiGo3 robot](https://www.dexterindustries.com/gopigo3/) that has quite a few advantages over the latter:
+
+1. **Versioned Software**: On this one, CI/CD systems are used, which means you have at your hand a safe mechanism for version controlling your software and for updating it to a very specific version.
+1. **Preview Packages**: Access to develop versions of the package. You can install packages from different branches of this repo. Check **Semantic Releasing** -> **Where Does This Get Pushed To** section.
+1. **CLI Tool**: On this version you also have a CLI tool with which you can interface with your GoPiGo3 robot directly from your terminal line. How cool!
+1. **Architecture**: A much better organized package directory-wise and semantic-wise.
+
+Also, this library is a drop-in replacement for the official library, where the only downside with it is that it doesn't include all functionalities in it. Functionalities have been stripped down because the original architecture of the classes and whatnot on the official are generally bad. Slowly, I'll be adding features back in while trying to keep it as compatible as possible.
+
+# CLI Tool
+
+There's also a CLI tool that allows you to interface with the GoPiGo3 directly from the terminal line.
+
+<img src="https://i.imgur.com/QKnDfib.gif">
+
+# Installing It
+
+The package can be either installed by:
+
+1. By using PIP to install it from [packagecloud.io/twine/develop](https://packagecloud.io/twine/develop)
+
+1. Or by going to the [releases page](https://github.com/RobertLucian/AltGPG3/releases) and download the latest `tar.gz` archive and then install it.
+
+To install it with PIP, you can run the following command:
+```
+pip install altgpg3 --extra-index-url=https://packagecloud.io/twine/develop/pypi/simple
+```
+Or by adding this `--extra-index-url` to a pip configuration file (or to the bottom of a requirements file). There's a script that does that for you:
+```
+curl -s https://packagecloud.io/install/repositories/twine/develop/script.python.sh | bash
+```
+
+
 # Semantic Releasing
 
 ## Commiting Stuff
