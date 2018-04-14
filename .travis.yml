@@ -9,8 +9,6 @@ before_script:
 script:
   - chmod +x build.sh && ./build.sh
   - chmod +x assets_release.sh && ./assets_release.sh
-after_success:
-  - [[ ! -f release_id.txt ]] && exit 4
 deploy:
   skip_cleanup: true
   provider: packagecloud
