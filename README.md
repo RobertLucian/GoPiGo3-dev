@@ -55,7 +55,7 @@ Semantic release pushes the following:
 2. Python installer as archive on the release page on GitHub.
 3. Python installer as archive on packagecloud.
 
-Also, on packagecloud, you have the option of installing packages from different branches. Say for instance there's a branch called `fix/gopigo3-commanding-wheel` and we do work on it - if we want to test it we can just `pip install gopigo3-fix-gopigo3-commanding-wheel` and there we have it. As a last example we can install from the `develop` branch by running `pip install gopigo3-develop`. Of course, since the package comes from packagecloud, you have to include the `extra-index-url` option.
+Also, on packagecloud, you have the option of installing packages from different branches. Say for instance there's a branch called `fix/gopigo3-commanding-wheel` and we do work on it - if we want to test it we can just `pip install altgpg3-fix-gopigo3-commanding-wheel` and there we have it. As a last example we can install from the `develop` branch by running `pip install altgpg3-develop`. Of course, since the package comes from packagecloud, you have to include the `extra-index-url` option.
 
 The versioning on branches that are not the `master` branch is done by using the date and the build number.
 
