@@ -30,8 +30,10 @@ do_master_release () {
   last_tag=$(git describe --tags --abbrev=0)
   echo "Reading and parsing commit messages since tag $last_tag"
 
-  git log $last_tag..HEAD --pretty=format:"%s%n%b" > changelog.txt
-  python ../process_changelog.py $last_tag changelog.txt release.json
+  # export json git log
+  git log $last_tag..HEAD --pretty=format:'{%n  "commit": "%H",%n  "abbreviated_commit": "%h",%n  "tree": "%T",%n  "abbreviated_tree": "%t",%n  "parent": "%P",%n  "abbreviated_parent": "%p",%n  "refs": "%D",%n  "encoding": "%e",%n  "subject": "%s",%n  "sanitized_subject_line": "%f",%n  "body": "%b",%n  "commit_notes": "%N",%n  "verification_flag": "%G?",%n  "signer": "%GS",%n  "signer_key": "%GK",%n  "author": {%n    "name": "%aN",%n    "email": "%aE",%n    "date": "%aD"%n  },%n  "commiter": {%n    "name": "%cN",%n    "email": "%cE",%n    "date": "%cD"%n  }%n},' | sed "$ s/,$//" | sed ':a;N;$!ba;s/\r\n\([^{]\)/\\n\1/g'| awk 'BEGIN { print("[") } { print($0) } END { print("]") }' > changelog.json
+  awk -f ../sanitizer.awk changelog.json > changelog_sanitized.json
+  python ../process_changelog.py $last_tag changelog_sanitized.json release.json
 
   if [[ -f release.json ]]; then
     export PYTHONIOENCODING=utf8
@@ -62,7 +64,7 @@ get_package_version_on_master () {
 PACKAGE_TOREPLACE_NAME=$(python setup.py --name)
 PACKAGE_TOREPLACE_VERSION=$(python setup.py --version)
 
-PACKAGE_NAME="gopigo3"
+PACKAGE_NAME="altgpg3"
 PACKAGE_VERSION=$PACKAGE_TOREPLACE_VERSION
 
 DATE=`date +%Y.%m`
@@ -120,7 +122,7 @@ if [[ $TRAVIS_PULL_REQUEST_BRANCH == "" ]]; then
     unknown_branch
     exit 2
   fi
-  
+
   echo "Releasing ${PACKAGE_NAME}=${PACKAGE_VERSION}"
 else
   # if we have a PR build
@@ -130,6 +132,7 @@ else
 fi
 
 sed -i -e 's/'"${PACKAGE_TOREPLACE_NAME}"'/'"${PACKAGE_NAME}"'/g' setup.py
+sed -i -e 's/'"${PACKAGE_TOREPLACE_NAME}"'/'"${PACKAGE_NAME}"'/g' altgpg3/command_line.py
 sed -i -e 's/'"${PACKAGE_TOREPLACE_VERSION}"'/'"${PACKAGE_VERSION}"'/g' setup.py
 
 popd

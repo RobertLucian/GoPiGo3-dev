@@ -1,14 +1,14 @@
 from setuptools import setup
 
 def readme():
-    with open('gopigo3/additional-files/README.rst') as f:
+    with open('altgpg3/additional-files/README.rst') as f:
         return f.read()
 
 setup(
     name='travis_package_name',
     version='0.1.0',
 
-    description='DexterIndustries Library for the GoPiGo3.',
+    description='Alternative to DexterIndustries\' library for the GoPiGo3.',
     long_description=readme(),
 
     author='Robert Lucian CHIRIAC',
@@ -26,14 +26,14 @@ setup(
         'Topic :: Software Development :: Embedded Systems',
         'Topic :: Software Development :: Libraries :: Python Modules',
         ],
-    url='https://github.com/RobertLucian/GoPiGo3-dev',
+    url='https://github.com/RobertLucian/AltGPG3',
 
-    keywords=['robot', 'gopigo', 'gopigo3', 'dexter industries', 'learning', 'education'],
+    keywords=['robot', 'gopigo', 'gopigo3', 'dexter industries', 'learning', 'education', 'alternative'],
 
-    packages=['gopigo3'],
-    package_data={'gopigo3': ['additional-files/*']},
+    packages=['altgpg3'],
+    package_data={'altgpg3': ['additional-files/*']},
     include_package_data=True,
-    install_requires=['spidev', 'RPi.GPIO', 'rst2ansi', 'docutils'],
-    entry_points=dict(console_scripts=['gopigo3=gopigo3.command_line:main']),
+    install_requires=['spidev', 'RPi.GPIO', 'rst2ansi', 'docutils', 'pygments'],
+    entry_points=dict(console_scripts=['altgpg3=altgpg3.command_line:main']),
     zip_safe=True
 )
