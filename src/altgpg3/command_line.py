@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser(description='This is a command-line tool for in
                                  '3. Checking the fw/hw and retrieving more info about it.\n'\
                                  '4. Flashing the fw.',
                                  formatter_class=argparse.RawTextHelpFormatter)
-parser.add_argument('-v', '--version', action='store_true', required=False, help='Retrieve the version of the GoPiGo3-dev pip package.')
+parser.add_argument('-v', '--version', action='store_true', required=False, help='Retrieve the version of the AltGPG3 pip package.')
 #############################################################
 
 #############################################################
@@ -86,10 +86,14 @@ def main():
     args = parser.parse_args()
     dict_args = vars(args)
 
+    # the default name given to the following variable
+    # must be the same as the name given in the setup.py
+    # and it also must be an unique identifier in this file
+    insert_pkgname_here = 'travis_package_name'
 
     if args.version:
         import pkg_resources as pkg
-        print("GoPiGo3-dev: " + pkg.get_distribution('gopigo3-dev').version)
+        print(insert_pkgname_here + ": " + pkg.get_distribution(insert_pkgname_here).version)
     else:
 
         import spidev
@@ -101,7 +105,7 @@ def main():
             return 1
 
         if 'action_command' in dict_args:
-            from gopigo3 import easygopigo3 as easy
+            from altgpg3 import easygopigo3 as easy
 
             # entered action subparser
             # this parser deals with controlling the GoPiGo3 (physically)
@@ -109,7 +113,7 @@ def main():
             try:
                 robot = easy.EasyGoPiGo3()
             except IOError:
-                print("The GoPiGo3 does not appear to be connected - command not issued.")
+                print("The GoPiGo3 board does not appear to be connected - command not issued.")
                 robot = None
             except easy.gopigo3.FirmwareVersionError as fw_error:
                 print(str(fw_error))
@@ -161,7 +165,7 @@ def main():
                     return 2
 
         elif 'action_check' in dict_args:
-            from gopigo3 import gopigo3
+            from altgpg3 import gopigo3
             try:
                 gpg3 = gopigo3.GoPiGo3()
 
@@ -193,8 +197,8 @@ def main():
         elif 'action_firmware' in dict_args:
             if args.action_firmware == 'burn':
                 import pkg_resources as pkg
-                updater_path = pkg.resource_filename('gopigo3', 'additional-files/firmware_burner.sh')
-                updater_dir = pkg.resource_filename('gopigo3', 'additional-files')
+                updater_path = pkg.resource_filename(insert_pkgname_here, 'additional-files/firmware_burner.sh')
+                updater_dir = pkg.resource_filename(insert_pkgname_here, 'additional-files')
 
                 if args.sudo:
                     status = run_command('sudo bash ' + updater_path, cwd=updater_dir)
@@ -205,7 +209,7 @@ def main():
                 if status == 0:
                     print('The firmware has been bit-banged successfully on the SPI lines.')
                 else:
-                    print('The firmware couldn\'t be flashed on the GoPiGo3.')
+                    print('The firmware couldn\'t be flashed on the GoPiGo3 board.')
 
         elif 'action_shutdown_button' in dict_args:
             if args.action_shutdown_button == 'configure':
@@ -214,7 +218,7 @@ def main():
                 if '0 loaded' in run_command('systemctl list-units --type=service | grep gpg3_power.service', get_output_instead=True, console_out=False):
                     # this means nothing is installed yet
 
-                    additional_files_path = pkg.resource_filename('gopigo3', 'additional-files')
+                    additional_files_path = pkg.resource_filename(insert_pkgname_here, 'additional-files')
                     runnable_path = additional_files_path + '/gpg3_power.py'
                     service_path = additional_files_path + '/gpg3_power.service'
 
@@ -244,10 +248,8 @@ def main():
         else:
             import pkg_resources as pkg
             from rst2ansi import rst2ansi
-            readme_path = pkg.resource_filename('gopigo3', 'additional-files/README.rst')
+            readme_path = pkg.resource_filename(insert_pkgname_here, 'additional-files/README.rst')
 
-            print('Enter "gopigo3 -h" or "gopigo3 --help" for instructions on how to use the command line to interface with the GoPiGo3\n')
+            print('Enter "' + insert_pkgname_here + ' -h" or "' + insert_pkgname_here ' --help" for instructions on how to use the command line to interface with the GoPiGo3\n')
             with open(readme_path, 'r') as f:
                 print(rst2ansi(f.read().encode('utf-8')))
-
-

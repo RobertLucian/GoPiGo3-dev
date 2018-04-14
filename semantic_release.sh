@@ -132,6 +132,7 @@ else
 fi
 
 sed -i -e 's/'"${PACKAGE_TOREPLACE_NAME}"'/'"${PACKAGE_NAME}"'/g' setup.py
+sed -i -e 's/'"${PACKAGE_TOREPLACE_NAME}"'/'"${PACKAGE_NAME}"'/g' altgpg3/command_line.py
 sed -i -e 's/'"${PACKAGE_TOREPLACE_VERSION}"'/'"${PACKAGE_VERSION}"'/g' setup.py
 
 popd
