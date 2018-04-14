@@ -64,7 +64,7 @@ get_package_version_on_master () {
 PACKAGE_TOREPLACE_NAME=$(python setup.py --name)
 PACKAGE_TOREPLACE_VERSION=$(python setup.py --version)
 
-PACKAGE_NAME="gopigo3"
+PACKAGE_NAME="altgpg3"
 PACKAGE_VERSION=$PACKAGE_TOREPLACE_VERSION
 
 DATE=`date +%Y.%m`
