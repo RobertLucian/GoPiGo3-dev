@@ -9,6 +9,9 @@ import time
 #
 #####################################################################
 
+def test():
+    print("yeah")
+
 
 class EasyGoPiGo3(gopigo3.GoPiGo3):
     """
